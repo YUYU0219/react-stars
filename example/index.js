@@ -1,6 +1,7 @@
 import React from 'react'
-import { render } from 'react-dom'
+import ReactDOM from 'react-dom/client';
 import Stars from '../src/react-stars'
+// import NewStars from '../src/newReact-stars'
 
 const firstExample = {
   size: 30,
@@ -29,7 +30,9 @@ const thirdExample = {
   }
 }
 
-render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
   <div>
     <h1>react-stars examples</h1>
     <p><i>Star rating component for your React projects</i></p>
@@ -39,6 +42,11 @@ render(
     <Stars {...secondExample} />
     Editable, preset value, half stars off
     <Stars {...thirdExample} />
+    <br/>
+    --------Test123----------
+    {/* <NewStars value = {10}/> */}
+    <br/>
+
     <a href="https://github.com/n49/react-stars">Github</a>&nbsp;|&nbsp;
     <a href="https://www.npmjs.com/package/react-stars">NPM package</a>
   </div>,

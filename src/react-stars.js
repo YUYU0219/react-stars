@@ -21,7 +21,7 @@ const getHalfStarStyles = (color, uniqueness) => {
       overflow: hidden;
       display: block;
       z-index: 1;
-      top: 0; left: 0;
+      top: 0; left: 0;  
       width: 50%;
       content: attr(data-forhalf);
       color: ${color};
