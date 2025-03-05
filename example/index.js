@@ -5,7 +5,7 @@ import NewStars from '../src/newReact-stars'
 
 const firstExample = {
   size: 30,
-  value: 2.5,
+  value: 3.6,
   edit: false
 }
 
@@ -44,7 +44,7 @@ root.render(
     <Stars {...thirdExample} />
     <br/>
     --------Test123----------
-    <NewStars {... firstExample}/> 
+    <NewStars/> 
     <br/>
 
     <a href="https://github.com/n49/react-stars">Github</a>&nbsp;|&nbsp;
