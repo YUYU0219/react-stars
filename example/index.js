@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client';
 import Stars from '../src/react-stars'
-// import NewStars from '../src/newReact-stars'
+import NewStars from '../src/newReact-stars'
 
 const firstExample = {
   size: 30,
@@ -44,7 +44,7 @@ root.render(
     <Stars {...thirdExample} />
     <br/>
     --------Test123----------
-    {/* <NewStars value = {10}/> */}
+    <NewStars {... firstExample}/> 
     <br/>
 
     <a href="https://github.com/n49/react-stars">Github</a>&nbsp;|&nbsp;

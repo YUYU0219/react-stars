@@ -28,17 +28,109 @@ const getHalfStarStyles = (color, uniqueness) => {
   }`
 };
 
-const ReactStars = ({value}) => {
+const ReactStars = ({
+  className,
+  edit = true,
+  half = true,
+  value = 0,
+  count = 5,
+  char = '★',
+  size = 15,
+  color1 = 'gray',
+  color2 = '#ffd700',
+  onChange = () => {},
+  }) => {
 
-  const [stars, setStars] = useState(value);
+  const [uniqueness] = useState((Math.random() + '').replace('.', ''));
+
+  const [stars, setStars] = useState([]);
+
+  const [halfStar, setHalfStar] = useState({
+
+    at: Math.floor(value),
+    hidden: half && value % 1 < 0.5,
+  });
+
+  const config ={
+    count,
+    size,
+    char,
+    color1,
+    color2,
+    half,
+    edit,
+  };
+
+  useEffect(() => {
+    setStars(getStars(value));
+  }, [value]);
+
+  const getRate = () => {
+    return half ? Math.floor(value) : Math.round(value);
+ 
+  }
+
+  const getStars = (activeCount) => {
+    if (typeof activeCount === 'undefined') {
+      activeCount = getRate();
+    }
+    // return Array.from({ length: count }, (_, i) => ({
+    //   active: i <= activeCount - 1,
+    // }));
+  };
+
+  const renderHalfStarStyleElement = () => {
+    return (
+      <style
+      dangerouslySetInnerHTML={{
+        __html: getHalfStarStyles(config.color2, uniqueness),
+      }}      
+      ></style>
+    )
+  }
+
+  const renderStars = () => {
+
+    // return stars.map((star, i) => {
+
+  //     let starClass = '';
+  //     if (half && !halfStar.hidden && halfStar.at === i) {
+  //       starClass = `react-stars-${uniqueness}`;
+  //     }
+
+  //     const style = {
+  //       ...defaultStyles,
+  //       color: star.active ? color2 : color1,
+  //       cursor: edit ? 'pointer' : 'default',
+  //       fontSize: `${size}px`,
+  //     };
+  
+
+  //     return (
+  //       <span
+  //         className={starClass}
+  //         style={style}
+  //         key={i}
+  //         data-index={i}
+  //         data-forhalf={config.char}
+  //         onMouseOver={mouseOver}
+  //         onMouseMove={mouseOver}
+  //         onMouseLeave={mouseLeave}
+  //         onClick={clicked}
+  //       >
+  //         {config.char}
+  //       </span>
+  //     );
+    // });
+  };
 
   
   return(
-    <div style={parentStyles}>
-
-      value = {value}
-      {/* {half && renderHalfStarStyleElement()}
-      {renderStars()} */}
+    <div className={className} style={parentStyles}>
+      
+      uniqueness = {uniqueness};
+      {half && renderHalfStarStyleElement()}
+      {renderStars()} 
       
     </div>
   )
@@ -57,17 +149,6 @@ ReactStars.propTypes = {
   color2: PropTypes.string
 }
 
-ReactStars.defaultProps = {
-  edit: true,
-  half: true,
-  value: 0,
-  count: 5,
-  char: '★',
-  size: 15,
-  color1: 'gray',
-  color2: '#ffd700',
 
-  onChange: () => { }
-};
 
 export default ReactStars

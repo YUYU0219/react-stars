@@ -1,26 +1,36 @@
 'use strict';
 
+const path = require('path'); 
+
 module.exports = {
 
+  mode: 'development',
   entry: ['./example/index.js'],
-
-  debug: true,
-
   devtool: 'inline-source-map',
 
   output: {
-    filename: './example/bundle.js',
-    pathinfo: true
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'example'),
   },
 
+  devServer: {
+    static: path.resolve(__dirname, 'example'),  // 指定靜態文件的根目錄
+    port: 8000,  // 設置端口
+    open: true,   // 自動在瀏覽器中打開
+    hot: true,    // 啟用熱重載
+  },
+
+
   module: {
-    loaders: [{
-      loader: 'babel-loader',
+    rules: [{
       test: /\.js$/,
       exclude: /node_modules/,
-      query: {
-        cacheDirectory: true,
-        presets: ['react', 'es2015']
+      use: {
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: true,
+          presets: ['@babel/preset-env', '@babel/preset-react']
+        }
       }
     }]
   }
