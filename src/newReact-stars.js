@@ -33,7 +33,7 @@ const ReactStars = ({
   edit = true,
   half = true,
   value = 0,
-  count = 11,
+  count = 10,
   char = '★',
   size = 30,
   color1 = 'gray',
@@ -47,6 +47,7 @@ const ReactStars = ({
     at: Math.floor(value),
     hidden: half && value % 1 < 0.5,
   });
+  const [currentValue, setCurrentValue] = useState(value); // Add state to track current value
 
   const config ={
     count,
@@ -59,12 +60,13 @@ const ReactStars = ({
   };
 
   useEffect(() => {
-    setStars(getStars(value));
-  }, [value]);
+    setStars(getStars(currentValue)); // Use currentValue instead of value
+  }, [currentValue]); // Depend on currentValue
+
+  const isDecimal = (value) => value % 1 !== 0;
 
   const getRate = () => {
-    return half ? Math.floor(value) : Math.round(value);
- 
+    return half ? Math.floor(currentValue) : Math.round(currentValue); // Use currentValue
   }
 
   const getStars = (activeCount) => {
@@ -76,24 +78,45 @@ const ReactStars = ({
     }));
   };
 
-  const mouseOver = () => {
-    
-  };
-
-  const mouseLeave = () => {
-  };
-
   const moreThanHalf = (event, size) => {
     const mouseAt = Math.round(Math.abs(event.clientX - event.target.getBoundingClientRect().left));
     return mouseAt > size / 2;
   };
 
-  const clicked =(event) => {
-    
+  const mouseOver = (event) => {
+    if (!edit) return;
+    let index = Number(event.target.getAttribute('data-index'));
+    if (half) {
+      const isAtHalf = moreThanHalf(event, size);
+      setHalfStar((prevState) => ({
+        ...prevState,
+        hidden: isAtHalf,
+        at: isAtHalf ? index + 1 : index,
+      }));
+      if (isAtHalf) index += 1;
+    } else {
+      index += 1;
+    }
+    setStars(getStars(index));
+  };
+
+  const mouseLeave = () => {
+    if (!edit) return;
+    if (half) {
+      setHalfStar((prevState) => ({
+        ...prevState,
+        hidden: !isDecimal(currentValue), // Use currentValue
+        at: Math.floor(currentValue), // Use currentValue
+      }));
+    }
+    setStars(getStars(currentValue)); // Use currentValue
+  };
+
+  const clicked = (event) => {
     if (!edit) return;
     let index = Number(event.target.getAttribute('data-index'));
     let newValue;
-    if (half){
+    if (half) {
       const isAtHalf = moreThanHalf(event, size);
       setHalfStar((prevState) => ({
         ...prevState,
@@ -104,8 +127,9 @@ const ReactStars = ({
     } else {
       newValue = index + 1;
     }
-
-    setStars(getStars(index));
+    
+    setCurrentValue(newValue); // Update current value
+    setStars(getStars(newValue));
     onChange(newValue);
   };
 
@@ -120,9 +144,7 @@ const ReactStars = ({
   }
 
   const renderStars = () => {
-
     return stars.map((star, i) => {
-
       let starClass = '';
       if (half && !halfStar.hidden && halfStar.at === i) {
         starClass = `react-stars-${uniqueness}`;
@@ -134,7 +156,6 @@ const ReactStars = ({
         cursor: edit ? 'pointer' : 'default',
         fontSize: `${size}px`,
       };
-  
 
       return (
         <span
@@ -148,25 +169,18 @@ const ReactStars = ({
           onMouseLeave={mouseLeave}
           onClick={clicked}
         >
-          
           {char}
         </span>
       );
     });
   };
 
-  
   return(
     <div className={className} style={parentStyles}>
-      
-      uniqueness = {uniqueness};
-      <br/>
       {half && renderHalfStarStyleElement()}
       {renderStars()} 
-      
     </div>
   )
-
 }
 
 ReactStars.propTypes = {
@@ -180,7 +194,5 @@ ReactStars.propTypes = {
   color1: PropTypes.string,
   color2: PropTypes.string
 }
-
-
 
 export default ReactStars

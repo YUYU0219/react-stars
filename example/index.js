@@ -42,8 +42,10 @@ root.render(
     <Stars {...secondExample} />
     Editable, preset value, half stars off
     <Stars {...thirdExample} />
+
+
     <br/>
-    --------Test123----------
+    --------Use new React version complete----------
     <NewStars/> 
     <br/>
 
